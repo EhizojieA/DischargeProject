@@ -1,0 +1,101 @@
+---
+title: "About App Page"
+output: 
+  html_document: 
+    theme: cerulean
+---
+
+ 
+
+# **Overview**
+
+This application is to be used to support Field Ecologists in creating Ingest Tables and plotting data. The files uploaded are all files from ADCP instruments: Q-Rev and Win River II. Multiple files may be uploaded at once.
+
+When uploading it is important to include 2 files, the files have extensions of .XML and .MMT. This application will process and check the files for missing values. Missing values or not being connected to the VPN may result errors disrupting the process of constructing the Ingest Table.
+
+**To access the repository for the application please use the following link: "ZN-REDACTED"**<!-- Provides app user a link to the internal Github repo -->
+
+
+## Using the App
+
+### **How to begin**
+When loading files, you can choose to click the 'Browse' button present on the left pane of the page or drag files from the file management software present on your operating system. **Which would be File Explorer if using Windows, Finder on MAC OS, and on Linux the software name may vary.** As stated above, multiple files may be uploaded at once. However 2 files are needed to construct the Ingest Table **.mmt and .xml files**. Please also include all files with a .PD0 and .PD0.nc extension.
+
+The .mmt file is the output file obtained from **WinRiver II** and the .xml file from **Q-Rev**.
+
+### **Once files are uploaded...**
+When uploaded without error, the uploaded ADCP data with uncertainty is plotted against the most recently published rating curve as a method of qualitative QAQC.
+
+
+
+### **Processing Steps in App**
+
+**1.)** A requirement is set to not perform any tasks until files have been uploaded. This prevents code from running prematurely and immediately crashing the application or returning a NULL error.
+
+**2.)** When uploading files, since many files may be uploaded there is a filter used to find files with extensions ending .XML and .mmt. These are used to construct the ouput Ingest Table and the plot against uncertainty. There are also checks performed that will give back an error and stop the app if files with those extensions can't be found. The error that will appear will mention that the files are not present. To fix the issue, the easiest method would be to refer back to the application either **Q-Rev** or **Win River II** and process new output files.
+
+**3.)** The output files mentioned above, the .XML and .mmt files, are then processed to be more easily referenced within the application.
+
+**4.)** Next, the specified sections of the files are referenced and assigned shortcuts to easily and quickly call the entered values. Values are also checked on whether the format is correct. Notably, for Timezone entered if not in UCT, an error will appear mentioning that Timezone is not in UCT and will stop the program and present the error notification to the user. To resolve the error, a user would need to edit the Timezone entered into Win River II as UCT.
+
+**5.)** Time stamps of the first and last transects are referenced from the Win River II output file and converted into YYYY-MM-DD format. Checks are performed on if entries exist for start date and end date. If not, an error is presented to the user mentioning that either the start or end date are missing and the application stops. To resolve the issue, the user would need to process a new Win River II output file and include the start/end date. Another check is then performed on whether the start date is earlier than the end date. If not, the user would resolve the issue by processing a new Win River II output file and correct the dates.
+
+**6.)** Reference data from the L0 database is referenced to build an outline of the output Ingest Table. If not connected to the VPN, the user will receive an error mentioning being unable to access the L0 database. To resolve, connect to the VPN. If the error mentions being unable to retrieve the ingest Workbook, please contact Zach Nickerson @  [nickerson@battelleecology.org](mailto:nickerson@battelleecology.org).
+
+**7.)** Referenced data from the L0 server is then used to populate the columns of the output Ingest Table and the Ingest Table is constructed to hold 1 row. Checks are performed on whether the Win River II file uploaded pertains to inflow or outflow. This will add a suffix to the station ID within the output Ingest Table.
+
+**8.)** The majority of the output Ingest Table is then populated with referenced data from the Win River II and Q-Rev files uploaded and referenced data from the L0 server.
+
+**9.)** The Sampling protocol is retrieved from the L0 server and placed within a section of the output Ingest Table. If the attempt to connect to the L0 server fails and returns an error that mentions being unable to access the L0 database, check if connected to the VPN.
+
+**10.)** The default file name is then created using references from the Win River II upload file and the end date.
+
+**11.)** Unnecessary columns within the output Ingest Table are removed.
+
+**12.)** A check is then performed for any missing values/empty columns within the output Ingest Table. A warning notification will be presented to the user if so, this will not stop the application. The user will be able to review and correct by referring to either Q-Rev or Win River II and re-processing output files.
+
+**13.)** Wind direction is pulled from the L0 server to eventually compare existing entries with wind direction recorded in the output Ingest Table. If an error is returned that mentions being **unable to access the L0 database**, please check connection to the VPN. If an error is returned that mentions being **unable to retrieve data from the L0 database**, please contact Zach Nickerson @  [nickerson@battelleecology.org](mailto:nickerson@battelleecology.org).
+
+**14.)** A comparison between existing wind direction inputs and the wind direction entry present in the output Ingest Table for validity. If the wind direction in the output Ingest Table does not match any present within the L0 server, an error will present to the user stating **Error: Wind direction**, which will then give examples of valid wind direction entries. To resolve, re-process the output file for Win River II to include a valid wind direction entry.
+
+**15.)** Total discharge within the output Ingest Table is checked if less than 0. If so, an info notification will alert the user, stating **Caution: Discharge Amount** and then further inform the user.
+
+**16.)** The total number of transects performed, which is present in the Q-Rev output file, is checked and if less than 4 were performed an error occurs and stops the application. The error will be presented to the user stating **Caution: Total Discharge** and then further explain to the user that at least 4 transects must be performed to successfully create the output Ingest Table.
+
+**17.)** The estimated uncertainty recorded in the output Ingest Table is checked if it is greater than 20% of total discharge. If so, a warning notification is presented to the user, this will not stop the application.
+
+**18.)** An archive, of all uploaded files are created and will be made available to the user.
+
+**19.)** The output Ingest Table is then displayed to the user.
+
+**20.)** The archived rating curve plotting data is pulled from a site. If an error occurs stating **Error: No RC Data**, please contact Zach Nickerson @  [nickerson@battelleecology.org](mailto:nickerson@battelleecology.org).
+
+**21.)** The rating curve plot data is then filtered from least to greatest and is filtered for the most recent data.
+
+**22.)** The plot is then constructed. Characteristics of the graph are made, such as: plot size, titles of the x and y axis are made, the placement of the legend, buttons to toggle between the graph being represented in log or linear mode, etc.
+
+**23.)** Traces are added to the graph: Remnant Uncertainty, Parametric Uncertainty, Rating Curve Gauging and Max/Post HQ traces.
+
+**24.)** The plot is then presented to the user.
+
+**25.)** A button is presented to the user afterwords, titled **Download Ingest Table**. Once clicked, the acknowledgement process begins and must be completed to download the Ingest Table.
+
+**26.)** After clicking the button the user is presented a question *"Have you reviewed this data?"*. Yes or no will be the only responses available. If no is selected, an error notification will appear stating **Please only proceed with data upload if you have conducted QAQC on the ADCP discharge bout**. 
+
+**27.)** If answered yes, a second question is then presented, *Are you ready to zip data package and send to GCS?*. If answered no, an error notification prompts stating **Please conduct QAQC on the ADCP discharge bout and proceed with the next step when you are ready to zip and upload the L0 ADCP data package to GCS**.
+
+**28.)** If answered yes, a button appears titled **Upload Data to GCS**. Once clicked, a success notification is presented to the user stating **Success**, then further stating that the ADCP Data package has been zipped and insructs to upload files to SOM.
+
+**29.)** Afterwards, 2 more buttons appear, titled **Download Ingest Table** and **Spreadsheet Uploader**. The 'Download Ingest Table' button will allow the user to download the output Ingest Table present currently present on the application as a .csv file. The 'Spreadsheet Uploader' button when clicked will open a new tab to SOM.
+
+## **Common Errors**
+Most of what the believed common errors will stop the code from Ingest Table from being made and will/should notify the user when encountered. The errors are:
+
+**1.** Errors relating to resolving the host. This error should automatically prompt a notification/alert informing the user to check their connection to the NEON VPN.
+
+**2.** Errors relating to the start/end date: There is processing performed to check that first, the start and end date within the uploaded .mmt and .xml files exist. Then checks are performed to verify that the start date is set to an earlier date than the end date.
+
+**3.** Errors relating to connecting to the L0 database that is used to populate and build the output Ingest Table. First, the VPN connection will be verified on the client. Then, the DATA get result attempt will be verified against a 404 status code error. This error would be the result of incorrect formatting of and/or inputs for the start date, end date and site ID. The notification, which should automatically appear once the error is encountered, will alert the user and advice to check inputs for the aforementioned sections of their observation. There is also a check performed on if GAG data referenced exists within the L0 database. The notification will then advice that the user check Fulcrum, confirm data, attend to error and re-upload after changes.
+
+### **For any errors encountered not mentioned above:**
+Please contact your administrator or **Zach Nickerson @ [nickerson@battelleecology.org](mailto:nickerson@battelleecology.org)**. Thank you.

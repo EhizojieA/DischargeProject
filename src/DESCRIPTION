@@ -1,0 +1,34 @@
+Package: shiny-dsc-adcp
+Title: Discharge ADCP QAQC and File Uploader
+Version: 1.0.0
+Authors@R: c(
+  person("Zach", "Nickerson", , "nickerson@battelleecology.org",
+  role = c("aut", "cre")),
+  person("Ehizojie", "Alli", , ,
+  role = c("aut", "cre")),
+  person("Nick", "Harrison", , "nharrison@battelleecology.org",
+  role = c("aut", "cre"))
+  )
+Description: A shiny application that will allow users to upload Q-Rev and Win River II output files and automatically construct an Ingest Table and Plot.
+License: Private
+URL: "ZN-REDACTED"
+Imports:
+	shiny,
+	XML,
+	plotly,
+	shinyjs,
+	shinyalert,
+	shinycssloaders,
+	bslib, 
+	DT,
+	markdown,
+	rmarkdown,
+	htmltools,
+	"ZN-REDACTED",
+	googleCloudStorageR,
+	gargle
+Remotes:
+  NEONScience/restR2
+
+
+  
